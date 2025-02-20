@@ -28,6 +28,19 @@ StrongObject new_strong_array(void* data,size_t len) {
   return object;
 }
 
+void* get_element(StrongObject strong_array,size_t index) {
+   if (strong_array.type!=Array && strong_array.type!=Vector) {
+      printf("%s","Not a strong array or a vector\n");
+      return NULL;
+   }
+   StrongVectorDescriptor* descriptor_ptr = ((StrongVectorDescriptor*)strong_array.data);
+   if (descriptor_ptr->length <= index) {
+      printf("%s","array index out of bounds mate\n");
+      return NULL;
+   }
+   return descriptor_ptr->elements[index];
+}
+
 StrongObject new_strong_bool(bool data){
    bool* d = (bool*)malloc(sizeof(bool));
    *d = data;
@@ -36,18 +49,7 @@ StrongObject new_strong_bool(bool data){
 }
 
 
-void* get_array_element(StrongObject strong_array,size_t index) {
-   if (strong_array.type!=Array) {
-      printf("%s","Not a strong array\n");
-      exit(0);
-   }
-   StrongVectorDescriptor* descriptor_ptr = ((StrongVectorDescriptor*)strong_array.data);
-   if (descriptor_ptr->length < index) {
-      printf("array index out of bounds mate\n");
-      exit(0);
-   }
-   return descriptor_ptr->elements[index];
-}
+
 
 //a vector will have ability to grow with time
 StrongObject new_strong_vector(){
@@ -62,7 +64,7 @@ StrongObject new_strong_vector(){
 StrongObject add_element_to_vector(StrongObject vector,void* element){
    if(vector.type!=Vector){
       printf("expected vector, got %d\n",vector.type);
-      exit(0);
+      exit(-1);
    }
    StrongVectorDescriptor* descriptor = (StrongVectorDescriptor*)vector.data;
    size_t length = descriptor->length;
@@ -75,7 +77,7 @@ StrongObject add_element_to_vector(StrongObject vector,void* element){
    }
    if(length>capacity){
        printf("length should always be less than capacity\n");
-       exit(0);
+       exit(-1);
    }
 
    //don't have space as length == capacity

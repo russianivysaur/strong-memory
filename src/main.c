@@ -32,12 +32,22 @@ int main(){
   char* element2 = "I am element 2";
   void* pointer_array[2];
   pointer_array[0] = &element1;
-  pointer_array[1] = &element2;
+  pointer_array[1] = element2;
   StrongObject array_object = new_strong_array(pointer_array,2);
-  void* element_ptr = get_array_element(array_object,2);
+  void* element_ptr = get_element(array_object,1);
   printf("%s\n",(char*)element_ptr);
-  element_ptr = get_array_element(array_object,0);
+  element_ptr = get_element(array_object,0);
   printf("%d\n",*(int*)element_ptr);
+  element_ptr = get_element(array_object,2);
+
+
+  printf("%s\n","Vector starts here");
+
+  // a strong vector
+  StrongObject vector_object = new_strong_vector();
+  element_ptr = get_element(vector_object,1);
+  element_ptr = get_element(vector_object,0);
+  element_ptr = get_element(vector_object,2);
 
   return 0;
 }
