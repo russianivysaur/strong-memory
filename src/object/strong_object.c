@@ -81,9 +81,15 @@ StrongObject add_element_to_vector(StrongObject vector,void* element){
    }
 
    //don't have space as length == capacity
-   //realloc
-   void* data = (void*)realloc(descriptor->elements,sizeof(descriptor->elements)*2);
+   //reallo
+   printf("resizing vector\n");
+   void* data = (void*)realloc(descriptor->elements,sizeof(void*)*descriptor->capacity*2);
    descriptor->elements = data;
+   descriptor->capacity *= 2;
+   descriptor->elements[length] = element;
+   descriptor->length++;
+   printf("vector length : %d\n",descriptor->length);
+   printf("vector cap : %d\n",descriptor->capacity);
    return vector;
 }
 

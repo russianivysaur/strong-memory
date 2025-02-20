@@ -45,9 +45,14 @@ int main(){
 
   // a strong vector
   StrongObject vector_object = new_strong_vector();
-  element_ptr = get_element(vector_object,1);
-  element_ptr = get_element(vector_object,0);
-  element_ptr = get_element(vector_object,2);
-
+  int a = 2000;
+  vector_object = add_element_to_vector(vector_object,&a);
+  char c = 't';
+  vector_object = add_element_to_vector(vector_object,&c);
+  char* string = "Ankit";
+  vector_object = add_element_to_vector(vector_object,string);
+  printf("%d\n",*(int*)get_element(vector_object,0));
+  printf("%c\n",*(int*)get_element(vector_object,1));
+  printf("%s\n",(char*)get_element(vector_object,2));
   return 0;
 }

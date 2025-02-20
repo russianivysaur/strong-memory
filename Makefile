@@ -10,7 +10,7 @@ pre:
 	mkdir build
 
 
-./build/strong.bin: ./build/strong_object.o ./build/main.o
+./build/strong.bin: ./build/strong_object.o ./build/stack.o ./build/main.o
 	$(LD) -o  $@ /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o $^ -lc /usr/lib/x86_64-linux-gnu/crtn.o -dynamic-linker /lib64/ld-linux-x86-64.so.2
 
 
@@ -19,6 +19,8 @@ pre:
 	$(CC) $(GCC_FLAGS) $< -o $@
 
 
+./build/stack.o: ./src/stack/stack.c
+	$(CC) $(GCC_FLAGS) $< -o $@
 
 ./build/main.o: ./src/main.c
 	$(CC) -c $< -o $@
