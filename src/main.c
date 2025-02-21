@@ -9,50 +9,5 @@
 
 int main(){
   printf("%s","Welcome to strong VM\n");
-
-  // a strong int
-  StrongObject int_object = new_strong_integer(10);
-  printf("%d\n",*(int*)(int_object.data));
-
-  //a strong bool
-  StrongObject bool_object = new_strong_bool(false);
-  printf("%b\n",*(bool*)(bool_object.data));
-
-  // a strong char
-  StrongObject char_object = new_strong_char('s');
-  printf("%c\n",*(char*)(char_object.data));
-
-  // a strong string
-  StrongObject string_object = new_strong_string("Hello my name is stronger");
-  printf("%s\n",(char*)(string_object.data));
-
-  // a strong array
-  // the array will contain a int,a string
-  int element1 = 10;
-  char* element2 = "I am element 2";
-  void* pointer_array[2];
-  pointer_array[0] = &element1;
-  pointer_array[1] = element2;
-  StrongObject array_object = new_strong_array(pointer_array,2);
-  void* element_ptr = get_element(array_object,1);
-  printf("%s\n",(char*)element_ptr);
-  element_ptr = get_element(array_object,0);
-  printf("%d\n",*(int*)element_ptr);
-  element_ptr = get_element(array_object,2);
-
-
-  printf("%s\n","Vector starts here");
-
-  // a strong vector
-  StrongObject vector_object = new_strong_vector();
-  int a = 2000;
-  vector_object = add_element_to_vector(vector_object,&a);
-  char c = 't';
-  vector_object = add_element_to_vector(vector_object,&c);
-  char* string = "Ankit";
-  vector_object = add_element_to_vector(vector_object,string);
-  printf("%d\n",*(int*)get_element(vector_object,0));
-  printf("%c\n",*(int*)get_element(vector_object,1));
-  printf("%s\n",(char*)get_element(vector_object,2));
   return 0;
 }

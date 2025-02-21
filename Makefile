@@ -1,8 +1,11 @@
 CC=gcc
 GCC_FLAGS= -c
 LD=ld
+LINK_FILES= /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/x86_64-linux-gnu/crtn.o
+DL_FILE=/lib64/ld-linux-x86-64.so.2
+TEST_OBJECT_FILES=./build/test/test.o ./build/test/test_object.o ./build/test/test_stack.o ./build/test/munit.o
+SYSTEM_FILES=./build/strong_object.o ./build/stack.o
 
-LD=ld
 all: pre ./build/strong.bin
 
 pre:
@@ -10,8 +13,8 @@ pre:
 	mkdir build
 
 
-./build/strong.bin: ./build/strong_object.o ./build/stack.o ./build/main.o
-	$(LD) -o  $@ /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o $^ -lc /usr/lib/x86_64-linux-gnu/crtn.o -dynamic-linker /lib64/ld-linux-x86-64.so.2
+./build/strong.bin:  ./build/main.o $(SYSTEM_FILES)
+	$(LD) -o $@ $(LINK_FILES) $^ -lc -dynamic-linker $(DL_FILE)
 
 
 
@@ -27,3 +30,29 @@ pre:
 
 clean:
 	rm -rf build
+
+
+test_pre:
+	rm -rf build
+	mkdir build
+	mkdir build/test
+
+test: test_pre ./build/test.bin
+	./build/test.bin
+
+./build/test.bin: $(TEST_OBJECT_FILES) $(SYSTEM_FILES)
+	$(LD) -o $@ $(LINK_FILES) $^ -lc -dynamic-linker $(DL_FILE)
+
+
+./build/test/test.o: ./test/test.c
+	$(CC) -c $< -o $@
+
+./build/test/test_object.o: ./test/object/test_object.c
+	$(CC) -c $< -o $@
+
+
+./build/test/test_stack.o: ./test/stack/test_stack.c
+	$(CC) -c $< -o $@
+
+./build/test/munit.o: ./lib/munit.c
+	$(CC) -c $< -o $@
