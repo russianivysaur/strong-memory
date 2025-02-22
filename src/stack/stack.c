@@ -15,6 +15,11 @@ void push(Stack* stack,void* data) {
   if(stack->size == stack->capacity) {
     //resize
     stack->data = (void*)realloc(stack->data,sizeof(void*)*stack->capacity*2);
+    if (stack->data == NULL ) {
+      printf("realloc failed for stack\n");
+      exit(0);
+      return;
+    }
     stack->capacity *= 2;
   }
   stack->data[stack->size] = data;

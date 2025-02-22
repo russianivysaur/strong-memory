@@ -38,7 +38,7 @@ test_pre:
 	mkdir build/test
 
 test: test_pre ./build/test.bin
-	./build/test.bin
+	valgrind --leak-check=full ./build/test.bin
 
 ./build/test.bin: $(TEST_OBJECT_FILES) $(SYSTEM_FILES)
 	$(LD) -o $@ $(LINK_FILES) $^ -lc -dynamic-linker $(DL_FILE)

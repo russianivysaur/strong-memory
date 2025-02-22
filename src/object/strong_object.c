@@ -1,39 +1,44 @@
 #include <stdlib.h>
 #include "stdbool.h"
-#include "stddef.h"
 #include "stdio.h"
 #include "strong_object.h"
 
 
-StrongObject new_strong_integer(int data) {
+strong_object* new_strong_integer(const int data) {
    int* d = (int*)malloc(sizeof(int));
    *d = data;
-   StrongObject object = {.type=Integer,.data=d};
-   return object;
+   const strong_object object = {.type=integer,.data=d};
+   strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
+   *object_ptr = object;
+   return object_ptr;
 }
 
-StrongObject new_strong_char(char data){
-  char* c = (char*)malloc(sizeof(char));
-  *c = data;
-  StrongObject object = {.type=Char,.data=c};
-  return object;
+strong_object* new_strong_char(const char data){
+   char* c = (char*)malloc(sizeof(char));
+   *c = data;
+   const strong_object object = {.type=character,.data=c};
+   strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
+   *object_ptr = object;
+   return object_ptr;
 }
 
 
-StrongObject new_strong_array(void* data,size_t len) {
-  StrongVectorDescriptor descriptor = {.elements=data,.length=len,.capacity=len};
-  StrongVectorDescriptor* descriptor_ptr = (StrongVectorDescriptor*)malloc(sizeof(StrongVectorDescriptor));
+strong_object* new_strong_array(void* data, const size_t len) {
+  const strong_vector_descriptor descriptor = {.elements=data,.length=len,.capacity=len};
+  strong_vector_descriptor* descriptor_ptr = (strong_vector_descriptor*)malloc(sizeof(strong_vector_descriptor));
   *descriptor_ptr = descriptor;
-  StrongObject object = {.type=Array,.data=descriptor_ptr};
-  return object;
+  const strong_object object = {.type=array,.data=descriptor_ptr};
+  strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
+   *object_ptr = object;
+   return object_ptr;
 }
 
-void* get_element(StrongObject strong_array,size_t index) {
-   if (strong_array.type!=Array && strong_array.type!=Vector) {
+void* get_element(const strong_object* strong_array, const size_t index) {
+   if (strong_array->type!=array && strong_array->type!=vector) {
       printf("%s","Not a strong array or a vector\n");
       return NULL;
    }
-   StrongVectorDescriptor* descriptor_ptr = ((StrongVectorDescriptor*)strong_array.data);
+   strong_vector_descriptor* descriptor_ptr = ((strong_vector_descriptor*)strong_array->data);
    if (descriptor_ptr->length <= index) {
       printf("%s","array index out of bounds mate\n");
       return NULL;
@@ -41,39 +46,43 @@ void* get_element(StrongObject strong_array,size_t index) {
    return descriptor_ptr->elements[index];
 }
 
-StrongObject new_strong_bool(bool data){
+strong_object* new_strong_bool(const bool data){
    bool* d = (bool*)malloc(sizeof(bool));
    *d = data;
-   StrongObject object = {.type=Bool,.data=d};
-   return object;
+   const strong_object object = {.type=boolean,.data=d};
+   strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
+   *object_ptr = object;
+   return object_ptr;
 }
 
 
 
 
 //a vector will have ability to grow with time
-StrongObject new_strong_vector(){
+strong_object* new_strong_vector(){
   void* data = (void*)malloc(sizeof(void*));
-  StrongVectorDescriptor descriptor = {.elements=data,.length=0,.capacity=1};
-  StrongVectorDescriptor* descriptor_ptr = (StrongVectorDescriptor*)malloc(sizeof(descriptor));
+  strong_vector_descriptor descriptor = {.elements=data,.length=0,.capacity=1};
+  strong_vector_descriptor* descriptor_ptr = (strong_vector_descriptor*)malloc(sizeof(descriptor));
   *descriptor_ptr = descriptor;
-  StrongObject object = {.data=descriptor_ptr,.type=Vector};
-  return object;
+  const strong_object object = {.data=descriptor_ptr,.type=vector};
+   strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
+   *object_ptr = object;
+   return object_ptr;
 }
 
-StrongObject add_element_to_vector(StrongObject vector,void* element){
-   if(vector.type!=Vector){
-      printf("expected vector, got %d\n",vector.type);
+void add_element_to_vector(const strong_object* vector_object,void* element){
+   if(vector_object->type!=vector){
+      printf("expected vector, got %d\n",vector_object->type);
       exit(-1);
    }
-   StrongVectorDescriptor* descriptor = (StrongVectorDescriptor*)vector.data;
-   size_t length = descriptor->length;
-   size_t capacity = descriptor->capacity;
+   strong_vector_descriptor* descriptor = (strong_vector_descriptor*)vector_object->data;
+   const size_t length = descriptor->length;
+   const size_t capacity = descriptor->capacity;
    if(length<capacity){
        // we have space hehe
-       descriptor->elements[length] = element;
-       descriptor->length++;
-       return vector;
+      descriptor->elements[length] = element;
+      descriptor->length++;
+      return;
    }
    if(length>capacity){
        printf("length should always be less than capacity\n");
@@ -82,19 +91,17 @@ StrongObject add_element_to_vector(StrongObject vector,void* element){
 
    //don't have space as length == capacity
    //reallo
-   printf("resizing vector\n");
    void* data = (void*)realloc(descriptor->elements,sizeof(void*)*descriptor->capacity*2);
    descriptor->elements = data;
    descriptor->capacity *= 2;
    descriptor->elements[length] = element;
    descriptor->length++;
-   printf("vector length : %d\n",descriptor->length);
-   printf("vector cap : %d\n",descriptor->capacity);
-   return vector;
 }
 
 
-StrongObject new_strong_string(char* data) {
-   StrongObject object = {.type=String,.data=data};
-   return object;
+strong_object* new_strong_string(char* data) {
+   const strong_object object = {.type=string,.data=data};
+   strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
+   *object_ptr = object;
+   return object_ptr;
 }
