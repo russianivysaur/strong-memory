@@ -1,5 +1,6 @@
 #include "stack.h"
 #include "stdlib.h"
+#include "../gc/gc.h"
 
 //you basic push pointers onto the stack
 

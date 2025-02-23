@@ -1,8 +1,20 @@
 #include "../object/strong_object.h"
 #include "stdlib.h"
 
+void free_object(strong_object*);
+
+//reference count collector
 void ref_count_inc(strong_object* object){
   object->ref_count++;
+}
+
+
+void ref_count_dec(strong_object* object){
+  if(object == NULL) return;
+  object->ref_count--;
+  if(object->ref_count <= 0){
+    free_object(object);
+  }
 }
 
 void free_object(strong_object* object) {
@@ -24,10 +36,6 @@ void free_object(strong_object* object) {
   }
 }
 
-void ref_count_dec(strong_object* object){
-  if(object == NULL) return;
-  object->ref_count--;
-  if(object->ref_count <= 0){
-    free_object(object);
-  }
-}
+
+
+// mark and sweep

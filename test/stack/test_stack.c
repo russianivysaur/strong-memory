@@ -17,6 +17,8 @@ void test_stack() {
   push(stack,&test_number);
   munit_assert_int(stack->size,==,3);
   munit_assert_int(stack->capacity,==,4);
+  free(stack->data);
+  free(stack);
 }
 
 

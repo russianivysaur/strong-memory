@@ -4,7 +4,7 @@ LD=ld
 LINK_FILES= /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/x86_64-linux-gnu/crtn.o
 DL_FILE=/lib64/ld-linux-x86-64.so.2
 TEST_OBJECT_FILES=./build/test/test.o ./build/test/test_object.o ./build/test/test_stack.o ./build/test/munit.o
-SYSTEM_FILES=./build/strong_object.o ./build/stack.o
+SYSTEM_FILES=./build/strong_object.o ./build/stack.o ./build/gc.o
 
 all: pre ./build/strong.bin
 
@@ -55,4 +55,8 @@ test: test_pre ./build/test.bin
 	$(CC) -c $< -o $@
 
 ./build/test/munit.o: ./lib/munit.c
+	$(CC) -c $< -o $@
+
+
+./build/gc.o: ./src/gc/gc.c
 	$(CC) -c $< -o $@

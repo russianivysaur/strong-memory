@@ -2,7 +2,7 @@
 #include "stdbool.h"
 #include "stdio.h"
 #include "strong_object.h"
-
+#include "../gc/gc.h"
 
 strong_object* new_strong_integer(const int data) {
    int* d = (int*)malloc(sizeof(int));
@@ -10,6 +10,7 @@ strong_object* new_strong_integer(const int data) {
    const strong_object object = {.type=integer,.data=d};
    strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
    *object_ptr = object;
+   ref_count_inc(object_ptr);
    return object_ptr;
 }
 
@@ -19,6 +20,7 @@ strong_object* new_strong_char(const char data){
    const strong_object object = {.type=character,.data=c};
    strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
    *object_ptr = object;
+   ref_count_inc(object_ptr);
    return object_ptr;
 }
 
@@ -30,6 +32,7 @@ strong_object* new_strong_array(void* data, const size_t len) {
   const strong_object object = {.type=array,.data=descriptor_ptr};
   strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
    *object_ptr = object;
+   ref_count_inc(object_ptr);
    return object_ptr;
 }
 
@@ -52,6 +55,7 @@ strong_object* new_strong_bool(const bool data){
    const strong_object object = {.type=boolean,.data=d};
    strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
    *object_ptr = object;
+   ref_count_inc(object_ptr);
    return object_ptr;
 }
 
@@ -67,6 +71,7 @@ strong_object* new_strong_vector(){
   const strong_object object = {.data=descriptor_ptr,.type=vector};
    strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
    *object_ptr = object;
+   ref_count_inc(object_ptr);
    return object_ptr;
 }
 
@@ -103,5 +108,6 @@ strong_object* new_strong_string(char* data) {
    const strong_object object = {.type=string,.data=data};
    strong_object* object_ptr = (strong_object*)malloc(sizeof(strong_object));
    *object_ptr = object;
+   ref_count_inc(object_ptr);
    return object_ptr;
 }

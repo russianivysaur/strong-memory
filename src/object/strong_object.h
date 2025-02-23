@@ -4,6 +4,7 @@
 
 #pragma once
 #include <stdbool.h>
+#include "stddef.h"
 
 // We support only signed 32 bit intergers, strings, characters, bools, arrays and vectors
 // The arrays and vecotrs are pointer stores which can store pointers to any objects being passed to it
